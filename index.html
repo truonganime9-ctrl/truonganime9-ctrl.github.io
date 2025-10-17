@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Chúc 20/10 — Dành cho bạn</title>
+    <style>
+        :root {
+            --bg1: #071427;
+            --bg2: #071020;
+            --card: #071124;
+            --panel: #0b1220;
+            --accent1: #ff7aa2;
+            --accent2: #7c3aed;
+            --muted: #9fb0c8;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        body {
+            background:
+                radial-gradient(1200px 400px at 10% 10%, rgba(124, 58, 237, 0.06), transparent 8%),
+                radial-gradient(900px 300px at 90% 80%, rgba(255, 122, 162, 0.04), transparent 6%),
+                linear-gradient(180deg, var(--bg1), var(--bg2));
+            color: #eaf6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+        }
+
+        /* container like video */
+        .container {
+            width: 100%;
+            max-width: 980px;
+            border-radius: 16px;
+            padding: 22px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            box-shadow: 0 14px 50px rgba(2, 6, 23, 0.6);
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 18px;
+            align-items: start;
+        }
+
+        @media(max-width:920px) {
+            .container {
+                grid-template-columns: 1fr
+            }
+        }
+
+        /* left main */
+        .main {
+            padding: 18px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.00));
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #041024;
+            font-size: 18px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 22px;
+            color: #fff
+        }
+
+        .subtitle {
+            color: var(--muted);
+            margin-top: 8px
+        }
+
+        .card-hero {
+            margin-top: 14px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(180deg, #031827, #021426);
+            padding: 16px;
+            position: relative
+        }
+
+        .hero-text {
+            font-size: 16px;
+            color: #dbeafe;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 600ms ease forwards 300ms
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        /* floating decorative hearts/particles */
+        .particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden
+        }
+
+        .particle {
+            position: absolute;
+            opacity: 0.06;
+            font-size: 20px;
+            transform: translateY(0);
+            animation: floatUp linear infinite
+        }
+
+        /* timeline style controls */
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px
+        }
+
+        .btn {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 0;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px
+        }
+
+        .btn.primary {
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            color: #041024
+        }
+
+        .btn.ghost {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--muted)
+        }
+
+        /* right column */
+        .aside {
+            padding: 16px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #021024, #021022);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center
+        }
+
+        .heart-big {
+            width: 120px;
+            height: 120px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            background: conic-gradient(from 120deg, #ffd6e8, #ffdbe9 50%, #fff);
+            color: #041024;
+            box-shadow: 0 12px 40px rgba(124, 58, 237, 0.12)
+        }
+
+        .wish {
+            color: var(--muted);
+            text-align: center
+        }
+
+        .small-note {
+            font-size: 13px;
+            color: var(--muted);
+            text-align: center
+        }
+
+        /* editing area */
+        .edit-box {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px
+        }
+
+        .input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            color: #eaf6ff
+        }
+
+        textarea {
+            min-height: 86px;
+            resize: vertical
+        }
+
+        .tools {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        /* QR block */
+        .qr-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            width: 100%
+        }
+
+        .qr-img {
+            width: 160px;
+            height: 160px;
+            border-radius: 8px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden
+        }
+
+        /* small responsive */
+        footer {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" role="main">
+        <section class="main" aria-labelledby="mainTitle">
+            <div class="title">
+                <div class="logo">20/10</div>
+                <div>
+                    <h1 id="mainTitle" contenteditable="true" spellcheck="false">Chúc Mừng Ngày Phụ Nữ 20/10 — Bạn Ơi!
+                    </h1>
+                    <div class="subtitle">Mở trang — xem thiệp nhỏ và gửi lời chúc ấm áp đến bạn bè.</div>
+                </div>
+            </div>
+
+            <div class="card-hero" id="cardHero">
+                <div class="particles" id="particles"></div>
+
+                <p class="hero-text" id="heroText" contenteditable="true" spellcheck="false">
+                    Chúc bạn một ngày 20/10 thật xinh tươi, tràn đầy tiếng cười và những điều bất ngờ dễ thương. Cảm ơn
+                    vì đã là người bạn tuyệt vời!
+                </p>
+
+                <div class="meta">
+                    <div class="note">Thiệp nhỏ — có thể chỉnh nội dung bằng cách click vào chữ</div>
+                    <div style="display:flex;gap:8px;align-items:center">
+                        <button class="btn primary" id="openBtn">Xem điều bất ngờ</button>
+                        <button class="btn ghost" id="editToggle">Chỉnh sửa</button>
+                    </div>
+                </div>
+
+                <div class="btns" style="margin-top:8px">
+                    <button class="btn ghost" id="downloadHtml">Tải HTML</button>
+                    <button class="btn ghost" id="copyLink">Sao chép link</button>
+                </div>
+            </div>
+        </section>
+
+        <aside class="aside" aria-label="Thiệp & QR">
+            <div class="heart-big">❤</div>
+            <div class="wish" id="wishPreview"><strong>Gửi bạn thân yêu:</strong><br>Chúc 20/10 thật nhiều niềm vui!
+            </div>
+            <div class="small-note">Bạn có thể sửa lời chúc ở bên trái (click vào đoạn văn).</div>
+
+            <div class="edit-box" id="editBox" style="display:none">
+                <input class="input" id="titleInput" placeholder="Tiêu đề (sẽ thay thế)" />
+                <textarea id="textInput" placeholder="Nội dung lời chúc..."></textarea>
+                <div class="tools">
+                    <button class="btn primary" id="applyBtn">Áp dụng</button>
+                    <button class="btn ghost" id="resetBtn">Khôi phục</button>
+                </div>
+            </div>
+
+            <div class="qr-box" aria-label="QR code">
+                <div style="font-weight:700">QR truy cập</div>
+                <div class="qr-img"><img id="qrImg" alt="QR code" style="width:100%;height:100%;object-fit:cover"
+                        src="" /></div>
+                <input class="input" id="qrUrl" placeholder="Nhập URL (mặc định: địa chỉ trang khi deploy)" />
+                <div style="display:flex;gap:8px;width:100%">
+                    <button class="btn primary" id="genQr">Generate QR</button>
+                    <button class="btn ghost" id="downloadQr">Tải QR</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer>Trang mẫu — bạn có thể sửa các chữ trực tiếp rồi tải HTML để up lên Vercel.</footer>
+
+    <script>
+        // ---------- particles (hearts) ----------
+        const particlesEl = document.getElementById('particles');
+        function createParticles(n = 12) {
+            particlesEl.innerHTML = '';
+            for (let i = 0; i < n; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.textContent = ['❤', '❀', '✦'][Math.floor(Math.random() * 3)];
+                const size = 12 + Math.random() * 22;
+                p.style.fontSize = size + 'px';
+                p.style.left = (Math.random() * 100) + '%';
+                p.style.top = (30 + Math.random() * 60) + '%';
+                p.style.opacity = 0.02 + Math.random() * 0.12;
+                const dur = 8 + Math.random() * 8;
+                p.style.animationDuration = dur + 's';
+                p.style.animationDelay = (Math.random() * 2) + 's';
+                particlesEl.appendChild(p);
+            }
+        }
+        createParticles(14);
+
+        // ---------- modal / surprise ----------
+        document.getElementById('openBtn').addEventListener('click', () => {
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed'; overlay.style.inset = '0'; overlay.style.background = 'rgba(2,6,23,0.72)';
+            overlay.style.display = 'flex'; overlay.style.alignItems = 'center'; overlay.style.justifyContent = 'center'; overlay.style.zIndex = 9999;
+            const modal = document.createElement('div');
+            modal.style.background = '#fff'; modal.style.color = '#041024'; modal.style.borderRadius = '12px'; modal.style.padding = '22px'; modal.style.maxWidth = '720px'; modal.style.width = '92%';
+            modal.innerHTML = `
+      <h2 style="margin:0 0 8px 0">Thiệp nhỏ</h2>
+      <p style="color:#334155;margin:0 0 12px 0">${document.getElementById('heroText').innerText}</p>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button id="closeModal" style="padding:10px 14px;border-radius:8px;border:0;background:linear-gradient(90deg,#ff7aa2,#7c3aed);color:#041024;font-weight:700">Đóng</button>
+        <button id="shareModal" style="padding:10px 14px;border-radius:8px;border:1px solid rgba(2,6,23,0.06);background:transparent">Chia sẻ</button>
+      </div>
+    `;
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+            overlay.querySelector('#closeModal').addEventListener('click', () => overlay.remove());
+            overlay.querySelector('#shareModal').addEventListener('click', () => {
+                const url = location.href;
+                if (navigator.share) navigator.share({ title: 'Thiệp 20/10', text: document.getElementById('heroText').innerText, url }).catch(() => { });
+                else navigator.clipboard?.writeText(url).then(() => alert('Đã copy link trang — gửi cho bạn chơi!'), () => alert('Không copy được, bạn thử thủ công nhé.'));
+            });
+        });
+
+        // ---------- edit controls ----------
+        const editToggle = document.getElementById('editToggle');
+        const editBox = document.getElementById('editBox');
+        const heroText = document.getElementById('heroText');
+        const titleEl = document.getElementById('mainTitle');
+        const wishPreview = document.getElementById('wishPreview');
+        const titleInput = document.getElementById('titleInput');
+        const textInput = document.getElementById('textInput');
+
+        editToggle.addEventListener('click', () => {
+            editBox.style.display = editBox.style.display === 'none' ? 'flex' : 'none';
+            titleInput.value = titleEl.innerText.trim();
+            textInput.value = heroText.innerText.trim();
+        });
+
+        document.getElementById('applyBtn').addEventListener('click', () => {
+            const t = titleInput.value.trim() || 'Chúc Mừng 20/10';
+            const txt = textInput.value.trim() || 'Chúc bạn một ngày 20/10 thật xinh tươi và nhiều niềm vui!';
+            titleEl.innerText = t;
+            heroText.innerText = txt;
+            wishPreview.innerHTML = `<strong>Gửi bạn thân yêu:</strong><br>${t}`;
+            editBox.style.display = 'none';
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            titleEl.innerText = 'Chúc Mừng Ngày Phụ Nữ 20/10 — Bạn Ơi!';
+            heroText.innerText = 'Chúc bạn một ngày 20/10 thật xinh tươi, tràn đầy tiếng cười và những điều bất ngờ dễ thương. Cảm ơn vì đã là người bạn tuyệt vời!';
+            wishPreview.innerHTML = `<strong>Gửi bạn thân yêu:</strong><br>Chúc 20/10 thật nhiều niềm vui!`;
+            editBox.style.display = 'none';
+        });
+
+        // ---------- copy link ----------
+        document.getElementById('copyLink').addEventListener('click', () => {
+            navigator.clipboard?.writeText(location.href).then(() => alert('Đã copy link trang hiện tại.'), () => alert('Copy không thành công'));
+        });
+
+        // ---------- download html (export current content) ----------
+        document.getElementById('downloadHtml').addEventListener('click', () => {
+            // recreate current HTML with current text content so user can upload changes
+            const cloneDoc = document.documentElement.cloneNode(true);
+            // remove script tags to avoid double-run; keep styles and markup; we'll inject a small hint
+            const scripts = cloneDoc.querySelectorAll('script');
+            scripts.forEach(s => s.remove());
+            // inject small comment about editing
+            const comment = cloneDoc.createComment('Tập tin HTML do trang 20/10 xuất ra. Bạn có thể deploy file này lên Vercel hoặc chỉnh sửa trước khi deploy.');
+            cloneDoc.insertBefore(comment, cloneDoc.firstChild);
+            const htmlText = '<!doctype html>\\n' + cloneDoc.outerHTML;
+            const blob = new Blob([htmlText], { type: 'text/html' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '20-10-friend.html'; a.click();
+            URL.revokeObjectURL(a.href);
+        });
+
+        // ---------- QR generation (uses Google Chart API image for simplicity) ----------
+        const qrImg = document.getElementById('qrImg');
+        const qrUrlInput = document.getElementById('qrUrl');
+        const genQrBtn = document.getElementById('genQr');
+        const downloadQrBtn = document.getElementById('downloadQr');
+
+        // default: empty src (user will input URL or use current)
+        function makeQr(url, size = 400) {
+            // encode URL
+            const u = encodeURIComponent(url);
+            // using Google Chart API for QR generation (works online)
+            return `https://chart.googleapis.com/chart?cht=qr&chs=${size}x${size}&chl=${u}&chld=L|1`;
+        }
+
+        genQrBtn.addEventListener('click', () => {
+            const url = qrUrlInput.value.trim() || location.href;
+            qrImg.src = makeQr(url, 500);
+            qrImg.alt = 'QR cho: ' + url;
+        });
+
+        downloadQrBtn.addEventListener('click', () => {
+            if (!qrImg.src) { alert('Chưa có QR — nhấn Generate QR trước.'); return; }
+            const a = document.createElement('a'); a.href = qrImg.src; a.download = 'qr-20-10.png'; a.click();
+        });
+
+        // ---------- small UX: auto generate QR with current location (useful after deploy) ----------
+        // Note: after you deploy, open the deployed URL and click "Generate QR" (or enter the final URL).
+        // If the page is opened from file://, location.href will be file path; user should enter deployed URL manually.
+        // We'll set placeholder to help.
+        qrUrlInput.placeholder = 'Ví dụ: https://love20-10.vercel.app/';
+
+        // ---------- small accessibility / keyboard ----------
+        // Allow Enter on qr input to generate
+        qrUrlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { genQrBtn.click(); } });
+
+        // ---------- small animate class for particles ----------
+        // CSS animation duration already randomized; add keyframes via JS (to be safe)
+        const style = document.createElement('style');
+        style.textContent = `@keyframes floatUp{from{transform:translateY(0) rotate(0deg)} to{transform:translateY(-360px) rotate(360deg)}}`;
+        document.head.appendChild(style);
+
+        // Accessibility: allow content edits in place to be saved via export.
+    </script>
+</body>
+
+</html>
