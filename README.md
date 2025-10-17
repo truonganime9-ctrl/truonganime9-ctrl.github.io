@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 Quay thưởng 20/10 🎁</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom, #ffe6f0 0%, #ffd9e6 50%, #ffffff 100%);
+            overflow: hidden;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #start_button {
+            font-size: 24px;
+            color: #ff4d94;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 15px 25px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        #start_button:hover {
+            transform: scale(1.05);
+        }
+
+        #messages {
+            position: absolute;
+            top: 15%;
+            width: 90%;
+            max-width: 700px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .line {
+            opacity: 0;
+            margin: 10px 0;
+            font-size: 20px;
+            /* Chỉnh size chữ cho vừa màn hình */
+            line-height: 1.6;
+            /* Tăng khoảng cách dòng */
+            font-weight: bold;
+            color: #e60073;
+            transition: opacity 1s, transform 1s;
+            transform: translateY(20px);
+        }
+
+        .line.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #extra-link {
+            display: none;
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 22px;
+            background: #ff4d94;
+            color: #fff;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #extra-link:hover {
+            background: #e60073;
+        }
+
+        #gift-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #popup-content {
+            position: relative;
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        #close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #aaa;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #close-btn:hover {
+            color: #333;
+        }
+
+        #pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 30px solid #c0392b;
+            z-index: 10;
+        }
+
+        #spin-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: #ff4d94;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #spin-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        canvas {
+            display: block;
+            transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .falling {
+            position: absolute;
+            top: -5vh;
+            font-size: 20px;
+            animation: fall linear infinite;
+            user-select: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div id="start_button">🌸 Nhấn để nhận quà 🌸</div>
+        <div id="messages"></div>
+        <a id="extra-link" href="#">🌟 Mở quà bất ngờ 🌟</a>
+    </div>
+
+    <div id="gift-popup">
+        <div id="popup-content">
+            <span id="close-btn">&times;</span>
+            <h2>Quay trúng thưởng 🎁</h2>
+            <div style="position: relative; width: 300px; margin: 0 auto;">
+                <div id="pointer"></div>
+                <canvas id="wheel" width="300" height="300"></canvas>
+            </div>
+            <button id="spin-btn">Quay</button>
+            <div id="wheel-result" style="margin-top: 20px; font-weight: bold; color: #e60073; font-size: 18px;"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(function () {
+            // --- PHẦN THIẾT LẬP GIẢI THƯỞNG VÀ TỶ LỆ ---
+            const prizes = [
+                { name: 'Bình thường 🎉', color: '#a0c4ff', weight: 45 },
+                { name: 'Plus 🌟', color: '#ffd6a5', weight: 35 },
+                { name: 'Pro 🏆', color: '#ffadad', weight: 25 }
+            ];
+
+            const wheelCanvas = document.getElementById('wheel');
+            const ctx = wheelCanvas.getContext('2d');
+            let currentRotation = 0;
+            const visualSegments = [
+                prizes[0], prizes[1], prizes[2], prizes[0], prizes[1],
+                prizes[0], prizes[2], prizes[0], prizes[1], prizes[0]
+            ];
+            const segCount = visualSegments.length;
+            const anglePerSeg = 2 * Math.PI / segCount;
+
+            function drawWheel() {
+                ctx.clearRect(0, 0, 300, 300);
+                visualSegments.forEach((segment, i) => {
+                    ctx.beginPath();
+                    ctx.moveTo(150, 150);
+                    ctx.arc(150, 150, 150, i * anglePerSeg, (i + 1) * anglePerSeg);
+                    ctx.closePath();
+                    ctx.fillStyle = segment.color;
+                    ctx.fill();
+                    ctx.save();
+                    ctx.translate(150, 150);
+                    ctx.rotate(i * anglePerSeg + anglePerSeg / 2);
+                    ctx.textAlign = 'right';
+                    ctx.fillStyle = '#333';
+                    ctx.font = 'bold 14px Segoe UI';
+                    ctx.fillText(segment.name, 140, 5);
+                    ctx.restore();
+                });
+            }
+
+            function getWeightedResult() {
+                const totalWeight = prizes.reduce((sum, p) => sum + p.weight, 0);
+                let random = Math.random() * totalWeight;
+                for (const prize of prizes) {
+                    if (random < prize.weight) return prize;
+                    random -= prize.weight;
+                }
+            }
+
+            // --- ĐÂY LÀ PHẦN LỜI CHÚC ĐÃ ĐƯỢC THAY ĐỔI ---
+            function showMessage() {
+                $('#messages').empty();
+                // Mình dùng thẻ <br> để xuống dòng cho đẹp nhé
+                var $line = $('<div class="line">Nhân dịp 20/10,<br>Chúc bạn iu của tui mau ăn chóng lớn và ngoan ngoãn nhé.<br>Luôn vui vẻ và nở nụ cười trên môi, không được tiêu cực.<br>Bạn iu ngày càng xinh xắn, dễ thương, mong bạn có tất cả trừ vất vả ạ.<br><strong>🌷 Tui thương bạn 🌷</strong></div>');
+                $('#messages').append($line);
+                setTimeout(() => $line.addClass('visible'), 100);
+            }
+            // --------------------------------------------------
+
+            $('#spin-btn').click(function () {
+                $(this).prop('disabled', true);
+                $('#wheel-result').text('');
+                const winningPrize = getWeightedResult();
+                let possibleStopIndexes = [];
+                visualSegments.forEach((index, i) => {
+                    if (visualSegments[i].name === winningPrize.name) possibleStopIndexes.push(i);
+                });
+                const targetIndex = possibleStopIndexes[Math.floor(Math.random() * possibleStopIndexes.length)];
+                const degreesPerSeg = 360 / segCount;
+                const targetAngle = (360 * 6) - (targetIndex * degreesPerSeg) - (degreesPerSeg / 2) + 90;
+                currentRotation += targetAngle;
+                wheelCanvas.style.transform = `rotate(${currentRotation}deg)`;
+
+                setTimeout(() => {
+                    $('#wheel-result').text("Bạn trúng: " + winningPrize.name);
+                    $(this).prop('disabled', false);
+                }, 5000);
+            });
+
+            $('#start_button').one('click', function () {
+                $(this).fadeOut();
+                showMessage(); // Gọi hàm hiển thị lời chúc mới
+                $('#extra-link').delay(1000).fadeIn();
+            });
+
+            $('#extra-link').click(function (e) { e.preventDefault(); $('#gift-popup').css('display', 'flex').hide().fadeIn(); });
+            $('#close-btn').click(function () { $('#gift-popup').fadeOut(); });
+
+            function createFalling() {
+                const item = $('<div class="falling"></div>').text(['❤️', '🌸', '✨'][Math.floor(Math.random() * 3)]);
+                item.css({ left: Math.random() * window.innerWidth, 'font-size': (Math.random() * 12 + 16) + 'px', 'animation-duration': (Math.random() * 5 + 4) + 's' });
+                $('body').append(item);
+                setTimeout(() => item.remove(), 9000);
+            }
+            setInterval(createFalling, 250);
+            drawWheel();
+        });
+    </script>
+</body>
+
+</html>
