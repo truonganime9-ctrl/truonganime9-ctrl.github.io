@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎁 Quay thưởng 20/10 🎁</title>
+    <title>🎁 Món Quà 20/10 🎁</title>
     <style>
         body,
         html {
@@ -24,43 +24,129 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 1;
+            /* Đảm bảo nội dung chính nằm dưới ảnh góc */
         }
 
-        #start_button {
-            font-size: 24px;
-            color: #ff4d94;
-            font-weight: bold;
+        /* === CSS CHO PHONG BÌ THƯ === */
+        #envelope-container {
             cursor: pointer;
-            padding: 15px 25px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
+            position: relative;
+            text-align: center;
         }
 
-        #start_button:hover {
-            transform: scale(1.05);
+        #envelope {
+            position: relative;
+            width: 220px;
+            height: 150px;
+            background: #ff7aa2;
+            border-radius: 10px;
+            transition: all 0.5s ease-in-out;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff7aa2;
+            border-radius: 10px;
+            z-index: 10;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            background: #ff9ebc;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+            z-index: 20;
+        }
+
+        .envelope-letter {
+            position: absolute;
+            top: 5px;
+            width: 200px;
+            height: 130px;
+            background: #fff;
+            border-radius: 5px;
+            left: 10px;
+            z-index: 5;
+            transition: all 0.5s 0.2s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #e60073;
+        }
+
+        .envelope-letter p {
+            margin: 0;
+        }
+
+        #envelope-shadow {
+            width: 240px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            margin: 10px auto 0;
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* === ANIMATION MỞ THƯ === */
+        #envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        #envelope-container.open .envelope-letter {
+            transform: translateY(-100px);
+        }
+
+        #envelope-container.open #envelope {
+            transform: translateY(30px);
+        }
+
+        #envelope-container.open #envelope-shadow {
+            transform: scale(0.8);
+            opacity: 0.5;
+        }
+
+        /* === KẾT THÚC CSS PHONG BÌ === */
+
+        /* === LỜI CHÚC (ĐÃ THÊM NỀN TRẮNG) === */
         #messages {
             position: absolute;
-            top: 15%;
-            width: 90%;
-            max-width: 700px;
+            top: 25%;
+            width: 85%;
+            max-width: 650px;
             left: 50%;
             transform: translateX(-50%);
+            display: none;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+            /* Đảm bảo lời chúc nằm trên nền mờ nhưng dưới ảnh góc */
         }
 
         .line {
             opacity: 0;
             margin: 10px 0;
             font-size: 20px;
-            /* Chỉnh size chữ cho vừa màn hình */
             line-height: 1.6;
-            /* Tăng khoảng cách dòng */
             font-weight: bold;
             color: #e60073;
-            transition: opacity 1s, transform 1s;
+            transition: opacity 1.5s, transform 1.5s;
             transform: translateY(20px);
         }
 
@@ -69,10 +155,12 @@
             transform: translateY(0);
         }
 
+        /* === KẾT THÚC CSS LỜI CHÚC === */
+
         #extra-link {
             display: none;
             position: absolute;
-            bottom: 15%;
+            bottom: 25%;
             left: 50%;
             transform: translateX(-50%);
             padding: 12px 22px;
@@ -82,6 +170,8 @@
             text-decoration: none;
             font-weight: bold;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 6;
+            /* Đảm bảo nút nằm trên lời chúc */
         }
 
         #extra-link:hover {
@@ -166,6 +256,8 @@
             font-size: 20px;
             animation: fall linear infinite;
             user-select: none;
+            z-index: 0;
+            /* Đảm bảo hiệu ứng rơi nằm dưới cùng */
         }
 
         @keyframes fall {
@@ -174,14 +266,76 @@
                 opacity: 0;
             }
         }
+
+        /* === [MỚI] CSS CHO 4 ẢNH GÓC === */
+        .corner-image-container {
+            position: fixed;
+            z-index: 1000;
+            /* Đảm bảo ảnh luôn nằm trên cùng */
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .corner-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        #top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        #top-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        #bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        #bottom-right {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        /* === KẾT THÚC CSS ẢNH GÓC === */
     </style>
 </head>
 
 <body>
+
+    <div class="corner-image-container" id="top-left">
+        <img src="https://i.postimg.cc/MH0QXBpF/g.jpg" alt="Ảnh góc trên trái">
+    </div>
+    <div class="corner-image-container" id="top-right">
+        <img src="https://i.postimg.cc/4H7GctpR/Image-2.png" alt="Ảnh góc trên phải">
+    </div>
+    <div class="corner-image-container" id="bottom-left">
+        <img src="https://i.postimg.cc/87VGF75y/Image-3.png" alt="Ảnh góc dưới trái">
+    </div>
+    <div class="corner-image-container" id="bottom-right">
+        <img src="https://i.postimg.cc/njMf87RC/Image-4.png" alt="Ảnh góc dưới phải">
+    </div>
     <div id="container">
-        <div id="start_button">🌸 Nhấn để nhận quà 🌸</div>
-        <div id="messages"></div>
-        <a id="extra-link" href="#">🌟 Mở quà bất ngờ 🌟</a>
+        <div id="envelope-container">
+            <div id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body"></div>
+                <div class="envelope-letter">
+                    <p>Nhấn để mở thư 💌</p>
+                </div>
+            </div>
+            <div id="envelope-shadow"></div>
+        </div>
+        <div id="messages"></div> <a id="extra-link" href="#">🌟 Mở quà bất ngờ 🌟</a>
     </div>
 
     <div id="gift-popup">
@@ -207,6 +361,7 @@
                 { name: 'Pro 🏆', color: '#ffadad', weight: 25 }
             ];
 
+            // --- PHẦN CODE VÒNG QUAY (Đã sửa lỗi quay sai + chữ lộn ngược) ---
             const wheelCanvas = document.getElementById('wheel');
             const ctx = wheelCanvas.getContext('2d');
             let currentRotation = 0;
@@ -216,10 +371,12 @@
             ];
             const segCount = visualSegments.length;
             const anglePerSeg = 2 * Math.PI / segCount;
+            const degreesPerSeg = 360 / segCount;
 
             function drawWheel() {
                 ctx.clearRect(0, 0, 300, 300);
                 visualSegments.forEach((segment, i) => {
+                    const angle = i * anglePerSeg + anglePerSeg / 2;
                     ctx.beginPath();
                     ctx.moveTo(150, 150);
                     ctx.arc(150, 150, 150, i * anglePerSeg, (i + 1) * anglePerSeg);
@@ -228,11 +385,17 @@
                     ctx.fill();
                     ctx.save();
                     ctx.translate(150, 150);
-                    ctx.rotate(i * anglePerSeg + anglePerSeg / 2);
-                    ctx.textAlign = 'right';
+                    ctx.rotate(angle);
                     ctx.fillStyle = '#333';
                     ctx.font = 'bold 14px Segoe UI';
-                    ctx.fillText(segment.name, 140, 5);
+                    if (angle > Math.PI * 0.5 && angle < Math.PI * 1.5) {
+                        ctx.rotate(Math.PI);
+                        ctx.textAlign = 'left';
+                        ctx.fillText(segment.name, -140, 5);
+                    } else {
+                        ctx.textAlign = 'right';
+                        ctx.fillText(segment.name, 140, 5);
+                    }
                     ctx.restore();
                 });
             }
@@ -246,28 +409,55 @@
                 }
             }
 
-            // --- ĐÂY LÀ PHẦN LỜI CHÚC ĐÃ ĐƯỢC THAY ĐỔI ---
+            // --- HIỂN THỊ LỜI CHÚC (ĐÃ KHÔI PHỤC) ---
             function showMessage() {
+                $('#messages').css('display', 'block'); // Hiện div#messages
                 $('#messages').empty();
-                // Mình dùng thẻ <br> để xuống dòng cho đẹp nhé
                 var $line = $('<div class="line">Nhân dịp 20/10,<br>Chúc bạn iu của tui mau ăn chóng lớn và ngoan ngoãn nhé.<br>Luôn vui vẻ và nở nụ cười trên môi, không được tiêu cực.<br>Bạn iu ngày càng xinh xắn, dễ thương, mong bạn có tất cả trừ vất vả ạ.<br><strong>🌷 Tui thương bạn 🌷</strong></div>');
                 $('#messages').append($line);
-                setTimeout(() => $line.addClass('visible'), 100);
+                setTimeout(() => $line.addClass('visible'), 500);
             }
-            // --------------------------------------------------
 
+            // === LOGIC MỞ THƯ (ĐÃ CẬP NHẬT) ===
+            $('#envelope-container').one('click', function () {
+                var $this = $(this);
+
+                // 1. Thêm class 'open' để kích hoạt animation
+                $this.addClass('open');
+
+                // 2. Đợi animation mở thư xong
+                setTimeout(function () {
+                    // Làm mờ lá thư
+                    $this.fadeOut();
+
+                    // Hiển thị lời chúc
+                    showMessage();
+
+                    // Hiển thị nút "Mở quà bất ngờ" sau khi lời chúc hiện ra
+                    $('#extra-link').delay(1000).fadeIn();
+                }, 1500); // Đợi 1.5 giây cho animation mở thư
+            });
+
+            // === BẤM QUAY (ĐÃ SỬA LỖI QUAY SAI KẾT QUẢ) ===
             $('#spin-btn').click(function () {
                 $(this).prop('disabled', true);
                 $('#wheel-result').text('');
+
                 const winningPrize = getWeightedResult();
+
                 let possibleStopIndexes = [];
-                visualSegments.forEach((index, i) => {
-                    if (visualSegments[i].name === winningPrize.name) possibleStopIndexes.push(i);
+                visualSegments.forEach((segment, index) => {
+                    if (segment.name === winningPrize.name) {
+                        possibleStopIndexes.push(index);
+                    }
                 });
+
                 const targetIndex = possibleStopIndexes[Math.floor(Math.random() * possibleStopIndexes.length)];
-                const degreesPerSeg = 360 / segCount;
-                const targetAngle = (360 * 6) - (targetIndex * degreesPerSeg) - (degreesPerSeg / 2) + 90;
+                const centerAngle = (targetIndex * degreesPerSeg) + (degreesPerSeg / 2);
+                const targetAngle = (360 * 6) + 270 - centerAngle;
+
                 currentRotation += targetAngle;
+
                 wheelCanvas.style.transform = `rotate(${currentRotation}deg)`;
 
                 setTimeout(() => {
@@ -276,12 +466,7 @@
                 }, 5000);
             });
 
-            $('#start_button').one('click', function () {
-                $(this).fadeOut();
-                showMessage(); // Gọi hàm hiển thị lời chúc mới
-                $('#extra-link').delay(1000).fadeIn();
-            });
-
+            // --- CÁC HÀM SỰ KIỆN KHÁC ---
             $('#extra-link').click(function (e) { e.preventDefault(); $('#gift-popup').css('display', 'flex').hide().fadeIn(); });
             $('#close-btn').click(function () { $('#gift-popup').fadeOut(); });
 
