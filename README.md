@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 Món Quà 20/10 🎁</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom, #ffe6f0 0%, #ffd9e6 50%, #ffffff 100%);
+            overflow: hidden;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            /* Đảm bảo nội dung chính nằm dưới ảnh góc */
+        }
+
+        /* === CSS CHO PHONG BÌ THƯ === */
+        #envelope-container {
+            cursor: pointer;
+            position: relative;
+            text-align: center;
+        }
+
+        #envelope {
+            position: relative;
+            width: 220px;
+            height: 150px;
+            background: #ff7aa2;
+            border-radius: 10px;
+            transition: all 0.5s ease-in-out;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff7aa2;
+            border-radius: 10px;
+            z-index: 10;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            background: #ff9ebc;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+            z-index: 20;
+        }
+
+        .envelope-letter {
+            position: absolute;
+            top: 5px;
+            width: 200px;
+            height: 130px;
+            background: #fff;
+            border-radius: 5px;
+            left: 10px;
+            z-index: 5;
+            transition: all 0.5s 0.2s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #e60073;
+        }
+
+        .envelope-letter p {
+            margin: 0;
+        }
+
+        #envelope-shadow {
+            width: 240px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            margin: 10px auto 0;
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* === ANIMATION MỞ THƯ === */
+        #envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        #envelope-container.open .envelope-letter {
+            transform: translateY(-100px);
+        }
+
+        #envelope-container.open #envelope {
+            transform: translateY(30px);
+        }
+
+        #envelope-container.open #envelope-shadow {
+            transform: scale(0.8);
+            opacity: 0.5;
+        }
+
+        /* === KẾT THÚC CSS PHONG BÌ === */
+
+        /* === LỜI CHÚC (ĐÃ THÊM NỀN TRẮNG) === */
+        #messages {
+            position: absolute;
+            top: 25%;
+            width: 85%;
+            max-width: 650px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+            /* Đảm bảo lời chúc nằm trên nền mờ nhưng dưới ảnh góc */
+        }
+
+        .line {
+            opacity: 0;
+            margin: 10px 0;
+            font-size: 20px;
+            line-height: 1.6;
+            font-weight: bold;
+            color: #e60073;
+            transition: opacity 1.5s, transform 1.5s;
+            transform: translateY(20px);
+        }
+
+        .line.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === KẾT THÚC CSS LỜI CHÚC === */
+
+        #extra-link {
+            display: none;
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 22px;
+            background: #ff4d94;
+            color: #fff;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 6;
+            /* Đảm bảo nút nằm trên lời chúc */
+        }
+
+        #extra-link:hover {
+            background: #e60073;
+        }
+
+        #gift-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #popup-content {
+            position: relative;
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        #close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #aaa;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #close-btn:hover {
+            color: #333;
+        }
+
+        #pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 30px solid #c0392b;
+            z-index: 10;
+        }
+
+        #spin-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: #ff4d94;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #spin-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        canvas {
+            display: block;
+            transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .falling {
+            position: absolute;
+            top: -5vh;
+            font-size: 20px;
+            animation: fall linear infinite;
+            user-select: none;
+            z-index: 0;
+            /* Đảm bảo hiệu ứng rơi nằm dưới cùng */
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* === [MỚI] CSS CHO 4 ẢNH GÓC === */
+        .corner-image-container {
+            position: fixed;
+            z-index: 1000;
+            /* Đảm bảo ảnh luôn nằm trên cùng */
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .corner-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        #top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        #top-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        #bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        #bottom-right {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        /* === KẾT THÚC CSS ẢNH GÓC === */
+    </style>
+</head>
+
+<body>
+
+    <div class="corner-image-container" id="top-left">
+        <img src="https://i.postimg.cc/MH0QXBpF/g.jpg" alt="Ảnh góc trên trái">
+    </div>
+    <div class="corner-image-container" id="top-right">
+        <img src="https://i.postimg.cc/4H7GctpR/Image-2.png" alt="Ảnh góc trên phải">
+    </div>
+    <div class="corner-image-container" id="bottom-left">
+        <img src="https://i.postimg.cc/87VGF75y/Image-3.png" alt="Ảnh góc dưới trái">
+    </div>
+    <div class="corner-image-container" id="bottom-right">
+        <img src="https://i.postimg.cc/njMf87RC/Image-4.png" alt="Ảnh góc dưới phải">
+    </div>
+    <div id="container">
+        <div id="envelope-container">
+            <div id="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body"></div>
+                <div class="envelope-letter">
+                    <p>Nhấn để mở thư 💌</p>
+                </div>
+            </div>
+            <div id="envelope-shadow"></div>
+        </div>
+        <div id="messages"></div> <a id="extra-link" href="#">🌟 Mở quà bất ngờ 🌟</a>
+    </div>
+
+    <div id="gift-popup">
+        <div id="popup-content">
+            <span id="close-btn">&times;</span>
+            <h2>Quay trúng thưởng 🎁</h2>
+            <div style="position: relative; width: 300px; margin: 0 auto;">
+                <div id="pointer"></div>
+                <canvas id="wheel" width="300" height="300"></canvas>
+            </div>
+            <button id="spin-btn">Quay</button>
+            <div id="wheel-result" style="margin-top: 20px; font-weight: bold; color: #e60073; font-size: 18px;"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(function () {
+            // --- PHẦN THIẾT LẬP GIẢI THƯỞNG VÀ TỶ LỆ ---
+            const prizes = [
+                { name: 'Bình thường 🎉', color: '#a0c4ff', weight: 45 },
+                { name: 'Plus 🌟', color: '#ffd6a5', weight: 35 },
+                { name: 'Pro 🏆', color: '#ffadad', weight: 25 }
+            ];
+
+            // --- PHẦN CODE VÒNG QUAY (Đã sửa lỗi quay sai + chữ lộn ngược) ---
+            const wheelCanvas = document.getElementById('wheel');
+            const ctx = wheelCanvas.getContext('2d');
+            let currentRotation = 0;
+            const visualSegments = [
+                prizes[0], prizes[1], prizes[2], prizes[0], prizes[1],
+                prizes[0], prizes[2], prizes[0], prizes[1], prizes[0]
+            ];
+            const segCount = visualSegments.length;
+            const anglePerSeg = 2 * Math.PI / segCount;
+            const degreesPerSeg = 360 / segCount;
+
+            function drawWheel() {
+                ctx.clearRect(0, 0, 300, 300);
+                visualSegments.forEach((segment, i) => {
+                    const angle = i * anglePerSeg + anglePerSeg / 2;
+                    ctx.beginPath();
+                    ctx.moveTo(150, 150);
+                    ctx.arc(150, 150, 150, i * anglePerSeg, (i + 1) * anglePerSeg);
+                    ctx.closePath();
+                    ctx.fillStyle = segment.color;
+                    ctx.fill();
+                    ctx.save();
+                    ctx.translate(150, 150);
+                    ctx.rotate(angle);
+                    ctx.fillStyle = '#333';
+                    ctx.font = 'bold 14px Segoe UI';
+                    if (angle > Math.PI * 0.5 && angle < Math.PI * 1.5) {
+                        ctx.rotate(Math.PI);
+                        ctx.textAlign = 'left';
+                        ctx.fillText(segment.name, -140, 5);
+                    } else {
+                        ctx.textAlign = 'right';
+                        ctx.fillText(segment.name, 140, 5);
+                    }
+                    ctx.restore();
+                });
+            }
+
+            function getWeightedResult() {
+                const totalWeight = prizes.reduce((sum, p) => sum + p.weight, 0);
+                let random = Math.random() * totalWeight;
+                for (const prize of prizes) {
+                    if (random < prize.weight) return prize;
+                    random -= prize.weight;
+                }
+            }
+
+            // --- HIỂN THỊ LỜI CHÚC (ĐÃ KHÔI PHỤC) ---
+            function showMessage() {
+                $('#messages').css('display', 'block'); // Hiện div#messages
+                $('#messages').empty();
+                var $line = $('<div class="line">Nhân dịp 20/10,<br>Chúc bạn iu của tui mau ăn chóng lớn và ngoan ngoãn nhé.<br>Luôn vui vẻ và nở nụ cười trên môi, không được tiêu cực.<br>Bạn iu ngày càng xinh xắn, dễ thương, mong bạn có tất cả trừ vất vả ạ.<br><strong>🌷 Tui thương bạn 🌷</strong></div>');
+                $('#messages').append($line);
+                setTimeout(() => $line.addClass('visible'), 500);
+            }
+
+            // === LOGIC MỞ THƯ (ĐÃ CẬP NHẬT) ===
+            $('#envelope-container').one('click', function () {
+                var $this = $(this);
+
+                // 1. Thêm class 'open' để kích hoạt animation
+                $this.addClass('open');
+
+                // 2. Đợi animation mở thư xong
+                setTimeout(function () {
+                    // Làm mờ lá thư
+                    $this.fadeOut();
+
+                    // Hiển thị lời chúc
+                    showMessage();
+
+                    // Hiển thị nút "Mở quà bất ngờ" sau khi lời chúc hiện ra
+                    $('#extra-link').delay(1000).fadeIn();
+                }, 1500); // Đợi 1.5 giây cho animation mở thư
+            });
+
+            // === BẤM QUAY (ĐÃ SỬA LỖI QUAY SAI KẾT QUẢ) ===
+            $('#spin-btn').click(function () {
+                $(this).prop('disabled', true);
+                $('#wheel-result').text('');
+
+                const winningPrize = getWeightedResult();
+
+                let possibleStopIndexes = [];
+                visualSegments.forEach((segment, index) => {
+                    if (segment.name === winningPrize.name) {
+                        possibleStopIndexes.push(index);
+                    }
+                });
+
+                const targetIndex = possibleStopIndexes[Math.floor(Math.random() * possibleStopIndexes.length)];
+                const centerAngle = (targetIndex * degreesPerSeg) + (degreesPerSeg / 2);
+                const targetAngle = (360 * 6) + 270 - centerAngle;
+
+                currentRotation += targetAngle;
+
+                wheelCanvas.style.transform = `rotate(${currentRotation}deg)`;
+
+                setTimeout(() => {
+                    $('#wheel-result').text("Bạn trúng: " + winningPrize.name);
+                    $(this).prop('disabled', false);
+                }, 5000);
+            });
+
+            // --- CÁC HÀM SỰ KIỆN KHÁC ---
+            $('#extra-link').click(function (e) { e.preventDefault(); $('#gift-popup').css('display', 'flex').hide().fadeIn(); });
+            $('#close-btn').click(function () { $('#gift-popup').fadeOut(); });
+
+            function createFalling() {
+                const item = $('<div class="falling"></div>').text(['❤️', '🌸', '✨'][Math.floor(Math.random() * 3)]);
+                item.css({ left: Math.random() * window.innerWidth, 'font-size': (Math.random() * 12 + 16) + 'px', 'animation-duration': (Math.random() * 5 + 4) + 's' });
+                $('body').append(item);
+                setTimeout(() => item.remove(), 9000);
+            }
+            setInterval(createFalling, 250);
+            drawWheel();
+        });
+    </script>
+</body>
+
+</html>
